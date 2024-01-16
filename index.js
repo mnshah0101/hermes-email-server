@@ -41,7 +41,9 @@ app.use(upload_profile.any());
 
 
 app.post('/api/logo_upload', async (req, res) => {
-    let files = req.files
+   
+        try{
+             let files = req.files
     let id = req.body.id
 
         let params = {
@@ -52,8 +54,13 @@ app.post('/api/logo_upload', async (req, res) => {
         let response = await s3.upload(params).promise();
 
         let image_destination = response.Location;
+        
 
         return res.json({image_destination:image_destination, id:id})
+        } catch(err){
+            console.log(err)
+            return res.status(400).json({message:'Internal Server Error'})
+        }
 
     })
 
